@@ -59,7 +59,7 @@ const App = () => {
         }
       </MapContainer>
       {address &&
-        <div dir='rtl' className='z-50 absolute shadow-2xl md:w-1/2 w-[90%] md:top-4 md:bottom-auto bottom-4 left-1/2 -translate-x-1/2 bg-white p-2 md:p-3 rounded-md'>
+        <div dir='rtl' className='z-50 absolute shadow-2xl md:w-1/2 w-[90%] md:top-4 md:bottom-auto bottom-16 left-1/2 -translate-x-1/2 bg-white p-2 md:p-3 rounded-md'>
           <div className='space-y-1 grid grid-cols-1 md:grid-cols-2 md:gap-x-4 text-sm md:text-base'>
             <div dir='rtl' className='flex items-center gap-2'>
               <p className='w-[40px] text-nowrap '>مبدا :</p>
