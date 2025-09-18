@@ -8,6 +8,7 @@ import axios from 'axios'
 import L from "leaflet"
 import "leaflet-routing-machine"
 import { IoMdLocate } from "react-icons/io";
+import { IoPin } from "react-icons/io5";
 
 const App = () => {
   const [position, setPosition] = useState(null);
@@ -45,7 +46,7 @@ const App = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <FlyToMyLocation position={position}/>
+        <FlyToMyLocation position={position} />
         <SelectPosition setPosition={setPosition} address={address} setOtherAddress={setOtherAddress} setAddress={setAddress} position={position} setOtherPosition={setOtherPosition} />
         {position &&
           <Marker position={position}>
@@ -60,7 +61,7 @@ const App = () => {
             <RoutingControl start={position} end={otherPosition} setRoute={setRoute} />
           </>
         }
-        
+
       </MapContainer>
       {address &&
         <div dir='rtl' className='z-50 absolute shadow-2xl md:w-1/2 w-[90%] md:top-4 md:bottom-auto bottom-16 left-1/2 -translate-x-1/2 bg-white p-2 md:p-3 rounded-md'>
@@ -150,11 +151,11 @@ function RoutingControl({ start, end, setRoute }) {
 }
 
 
-function FlyToMyLocation({position}){
+function FlyToMyLocation({ position }) {
   const map = useMap();
-  useEffect(()=>{
-    if(position){
-      map.flyTo(position)
+  useEffect(() => {
+    if (position) {
+      map.flyTo(position, 16)
     }
-  },[position])
+  }, [position])
 }
