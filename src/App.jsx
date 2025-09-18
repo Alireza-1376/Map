@@ -17,16 +17,21 @@ const App = () => {
   const [otherAddress, setOtherAddress] = useState(null);
   const [route, setRoute] = useState(null);
   const [controlFly, setControlFly] = useState(false);
-
+  const [whatchId, setWatchId] = useState(null);
+  console.log(position)
   function handleDelete() {
     setPosition(null)
     setOtherPosition(null)
     setAddress(null)
     setOtherAddress(null)
     setRoute(null)
+    if (whatchId) {
+      navigator.geolocation.clearWatch(whatchId)
+      setWatchId(null)
+    }
   }
-  async function getMyLocation() {
-    navigator.geolocation.watchPosition(async (pos) => {
+  function getMyLocation() {
+    const id = navigator.geolocation.watchPosition(async (pos) => {
       setPosition([pos.coords.latitude, pos.coords.longitude])
       try {
         const response = await axios.get(`https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json&accept-language=fa`)
@@ -37,7 +42,9 @@ const App = () => {
 
       }
     })
+    setWatchId(id)
   }
+
 
   return (
     <div className='relative h-screen w-screen overflow-auto'>
@@ -88,7 +95,7 @@ const App = () => {
             }
           </div>
           <div className='flex justify-center pt-1 md:pt-4 text-sm md:text-base'>
-            <button onClick={() => { handleDelete() ; setControlFly(false) }} className='bg-green-700 text-white py-0.5 px-8 rounded-md text-center'>حذف</button>
+            <button onClick={() => { handleDelete(); setControlFly(false) }} className='bg-green-700 text-white py-0.5 px-8 rounded-md text-center'>حذف</button>
           </div>
         </div>
       }
