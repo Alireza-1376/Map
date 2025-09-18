@@ -16,7 +16,7 @@ const App = () => {
   const [address, setAddress] = useState(null);
   const [otherAddress, setOtherAddress] = useState(null);
   const [route, setRoute] = useState(null);
-  const [controlFly , setControlFly] = useState(false);
+  const [controlFly, setControlFly] = useState(false);
 
   function handleDelete() {
     setPosition(null)
@@ -46,7 +46,7 @@ const App = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <FlyToMyLocation position={position} controlFly={controlFly} setControlFly={setControlFly}/>
+        <FlyToMyLocation position={position} controlFly={controlFly} setControlFly={setControlFly} />
         <SelectPosition setControlFly={setControlFly} setPosition={setPosition} address={address} setOtherAddress={setOtherAddress} setAddress={setAddress} position={position} setOtherPosition={setOtherPosition} />
         {position &&
           <Marker position={position}>
@@ -88,12 +88,12 @@ const App = () => {
             }
           </div>
           <div className='flex justify-center pt-1 md:pt-4 text-sm md:text-base'>
-            <button onClick={() => { handleDelete() }} className='bg-green-700 text-white py-0.5 px-8 rounded-md text-center'>حذف</button>
+            <button onClick={() => { handleDelete() ; setControlFly(false) }} className='bg-green-700 text-white py-0.5 px-8 rounded-md text-center'>حذف</button>
           </div>
         </div>
       }
       <div className='absolute top-3 z-30 right-3'>
-        <button onClick={() => { getMyLocation() ; setControlFly(true) }} className='bg-white p-2 rounded-md shadow-xl'>
+        <button onClick={() => { getMyLocation(); setControlFly(true) }} className='bg-white p-2 rounded-md shadow-xl'>
           <IoMdLocate size={30} />
         </button>
       </div>
@@ -103,7 +103,7 @@ const App = () => {
 
 export default App;
 
-function SelectPosition({ position, setPosition, setOtherPosition, setAddress, address, setOtherAddress ,setControlFly }) {
+function SelectPosition({ position, setPosition, setOtherPosition, setAddress, address, setOtherAddress, setControlFly }) {
   useMapEvent({
     click: async (e) => {
       const lat = e.latlng.lat;
@@ -152,12 +152,12 @@ function RoutingControl({ start, end, setRoute }) {
 }
 
 
-function FlyToMyLocation({ position , controlFly ,setControlFly}) {
+function FlyToMyLocation({ position, controlFly, setControlFly }) {
   const map = useMap();
   useEffect(() => {
-    if (position && controlFly==true) {
+    if (position && controlFly == true) {
       map.flyTo(position, 15)
       setControlFly(false)
     }
-  }, [position , controlFly])
+  }, [position, controlFly])
 }
