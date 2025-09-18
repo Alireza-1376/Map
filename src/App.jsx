@@ -8,7 +8,7 @@ import axios from 'axios'
 import L from "leaflet"
 import "leaflet-routing-machine"
 import { IoMdLocate } from "react-icons/io";
-import { IoPin } from "react-icons/io5";
+
 
 const App = () => {
   const [position, setPosition] = useState(null);
@@ -16,7 +16,7 @@ const App = () => {
   const [address, setAddress] = useState(null);
   const [otherAddress, setOtherAddress] = useState(null);
   const [route, setRoute] = useState(null);
-
+  const [controlFly , setControlFly] = useState(false);
 
   function handleDelete() {
     setPosition(null)
@@ -46,7 +46,7 @@ const App = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <FlyToMyLocation position={position} />
+        <FlyToMyLocation position={position} controlFly={controlFly} setControlFly={setControlFly}/>
         <SelectPosition setPosition={setPosition} address={address} setOtherAddress={setOtherAddress} setAddress={setAddress} position={position} setOtherPosition={setOtherPosition} />
         {position &&
           <Marker position={position}>
@@ -93,7 +93,7 @@ const App = () => {
         </div>
       }
       <div className='absolute top-3 z-30 right-3'>
-        <button onClick={() => { getMyLocation() }} className='bg-white p-2 rounded-md shadow-xl'>
+        <button onClick={() => { getMyLocation() ; setControlFly(true) }} className='bg-white p-2 rounded-md shadow-xl'>
           <IoMdLocate size={30} />
         </button>
       </div>
@@ -151,11 +151,12 @@ function RoutingControl({ start, end, setRoute }) {
 }
 
 
-function FlyToMyLocation({ position }) {
+function FlyToMyLocation({ position , controlFly ,setControlFly}) {
   const map = useMap();
   useEffect(() => {
-    if (position) {
+    if (position && controlFly==true) {
       map.flyTo(position, 16)
+      setControlFly(false)
     }
-  }, [position])
+  }, [position , controlFly])
 }
