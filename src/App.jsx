@@ -15,7 +15,8 @@ const App = () => {
   const [address, setAddress] = useState(null);
   const [otherAddress, setOtherAddress] = useState(null);
   const [route, setRoute] = useState(null);
-  
+
+
   function handleDelete() {
     setPosition(null)
     setOtherPosition(null)
@@ -36,6 +37,7 @@ const App = () => {
       }
     })
   }
+
   return (
     <div className='relative h-screen w-screen overflow-auto'>
       <MapContainer className='h-screen w-full z-10' center={position || [35.6892, 51.3890]} zoom={13} scrollWheelZoom={false}>
@@ -43,6 +45,7 @@ const App = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <FlyToMyLocation position={position}/>
         <SelectPosition setPosition={setPosition} address={address} setOtherAddress={setOtherAddress} setAddress={setAddress} position={position} setOtherPosition={setOtherPosition} />
         {position &&
           <Marker position={position}>
@@ -57,6 +60,7 @@ const App = () => {
             <RoutingControl start={position} end={otherPosition} setRoute={setRoute} />
           </>
         }
+        
       </MapContainer>
       {address &&
         <div dir='rtl' className='z-50 absolute shadow-2xl md:w-1/2 w-[90%] md:top-4 md:bottom-auto bottom-16 left-1/2 -translate-x-1/2 bg-white p-2 md:p-3 rounded-md'>
@@ -77,7 +81,7 @@ const App = () => {
                 </div>
                 <div dir='rtl' className='flex items-center gap-2'>
                   <p className='w-[40px] text-nowrap '>زمان :</p>
-                  <input value={`${(route.totalTime / 60).toFixed(0)} دقیقه`} disabled type="text" className='border-0 flex-1 w-3/4 overflow-x-auto outline-none bg-gray-200 p-1 md:p-2 rounded-md' />
+                  <input value={(route.totalTime / 60) < 60 ? `${(route.totalTime / 60).toFixed(0)} دقیقه` : `${Math.floor(((route.totalTime / 60).toFixed(0) / 60))} ساعت و ${((route.totalTime / 60).toFixed(0)) % 60} دقیقه`} disabled type="text" className='border-0 flex-1 w-3/4 overflow-x-auto outline-none bg-gray-200 p-1 md:p-2 rounded-md' />
                 </div>
               </>
             }
@@ -87,7 +91,7 @@ const App = () => {
           </div>
         </div>
       }
-      <div className='absolute top-8 z-30 right-8'>
+      <div className='absolute top-3 z-30 right-3'>
         <button onClick={() => { getMyLocation() }} className='bg-white p-2 rounded-md shadow-xl'>
           <IoMdLocate size={30} />
         </button>
@@ -143,4 +147,14 @@ function RoutingControl({ start, end, setRoute }) {
       map.removeControl(control)
     }
   }, [start, end])
+}
+
+
+function FlyToMyLocation({position}){
+  const map = useMap();
+  useEffect(()=>{
+    if(position){
+      map.flyTo(position)
+    }
+  },[position])
 }
