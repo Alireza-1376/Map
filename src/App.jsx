@@ -47,7 +47,7 @@ const App = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <FlyToMyLocation position={position} controlFly={controlFly} setControlFly={setControlFly}/>
-        <SelectPosition setPosition={setPosition} address={address} setOtherAddress={setOtherAddress} setAddress={setAddress} position={position} setOtherPosition={setOtherPosition} />
+        <SelectPosition setControlFly={setControlFly} setPosition={setPosition} address={address} setOtherAddress={setOtherAddress} setAddress={setAddress} position={position} setOtherPosition={setOtherPosition} />
         {position &&
           <Marker position={position}>
             <Popup></Popup>
@@ -103,13 +103,14 @@ const App = () => {
 
 export default App;
 
-function SelectPosition({ position, setPosition, setOtherPosition, setAddress, address, setOtherAddress }) {
+function SelectPosition({ position, setPosition, setOtherPosition, setAddress, address, setOtherAddress ,setControlFly }) {
   useMapEvent({
     click: async (e) => {
       const lat = e.latlng.lat;
       const lng = e.latlng.lng;
       if (position != null) {
         setOtherPosition([lat, lng])
+        setControlFly(true)
       } else {
         setPosition([lat, lng])
       }
@@ -155,7 +156,7 @@ function FlyToMyLocation({ position , controlFly ,setControlFly}) {
   const map = useMap();
   useEffect(() => {
     if (position && controlFly==true) {
-      map.flyTo(position, 16)
+      map.flyTo(position, 15)
       setControlFly(false)
     }
   }, [position , controlFly])
